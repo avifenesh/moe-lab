@@ -1,0 +1,41 @@
+# Base run config (R0, seed 0). Copy and set model.balancing / train.run_name /
+# train.seed for the other runs in the matrix.
+model:
+  vocab_size: 16000
+  d_model: 512
+  n_layer: 8
+  n_head: 8
+  max_seq_len: 1024
+  n_experts: 8
+  top_k: 2
+  expert_hidden: 320
+  balancing: aux            # R0=aux, R1=aux_free, R2=aux_decorr
+  aux_loss_coeff: 0.01
+  decorr_coeff: 0.01
+  bias_update_rate: 0.001
+data:
+  dataset: HuggingFaceFW/fineweb-edu
+  subset: sample-10BT
+  tokenizer_path: tokenizer/tokenizer.json
+  cache_dir: data_cache
+  seq_len: 1024
+  shard_tokens: 1000000
+train:
+  run_name: r0-seed0
+  seed: 0
+  batch_size: 8
+  grad_accum: 4             # 8 * 1024 * 4 = 32768 tokens/step
+  total_tokens: 500000000
+  lr: 0.0006
+  min_lr_ratio: 0.1
+  warmup_steps: 500
+  weight_decay: 0.1
+  grad_clip: 1.0
+  bf16: true
+  grad_checkpoint: false
+  eval_interval: 500
+  eval_batches: 8
+  ckpt_interval: 2500
+  telemetry: true
+  device: cuda
+  out_root: runs
