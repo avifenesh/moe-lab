@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Deploy moe-lab to the Jetson and print the exact command to launch a run.
-# Usage: scripts/jetson_deploy.sh <run-name> [config-path]
+# Usage: JETSON_HOST=user@host scripts/jetson_deploy.sh <run-name> [config-path]
 set -euo pipefail
 
-RUN_NAME="${1:?usage: jetson_deploy.sh <run-name> [config.yaml]}"
+RUN_NAME="${1:?usage: JETSON_HOST=user@host jetson_deploy.sh <run-name> [config.yaml]}"
 CONFIG="${2:-configs/base.yaml}"
-REMOTE="nvidia@192.168.56.1"
+REMOTE="${JETSON_HOST:?set JETSON_HOST=user@host for your Jetson}"
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 rsync -az --delete \

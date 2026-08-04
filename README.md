@@ -74,7 +74,7 @@ clamped so at least top-k experts remain.
 python scripts/train_tokenizer.py                 # once, ~1GB stream
 python train.py --config configs/base.yaml        # R0 seed 0
 python scripts/smoke_test.py                      # desktop smoke test
-scripts/jetson_deploy.sh r0-seed0 configs/base.yaml   # deploy + print launch cmd
+JETSON_HOST=user@jetson scripts/jetson_deploy.sh r0-seed0 configs/base.yaml  # deploy + print launch cmd
 ```
 
 No wandb / external services: telemetry is JSONL only.
