@@ -33,8 +33,8 @@ only the balancing mechanism differs, per the design above.
 
 Per step: train loss, aux loss, reg (decorrelation) loss, lr, per-layer router
 entropy (nats), per-expert token counts, tok/s.
-Per eval (fixed held-out calibration batches, crc32-diverted ~0.1% of the
-stream): val loss, per-expert gate-weighted activation norms, per-layer pairwise
+Per eval (fixed held-out calibration batches from cached shard 0, the first 1M
+tokens of the stream, which training never reads): val loss, per-expert gate-weighted activation norms, per-layer pairwise
 expert-weight cosine similarity, router bias.
 
 **Prunability curve** (`moe_lab/prune_eval.py`): on N calibration batches,
@@ -59,7 +59,7 @@ clamped so at least top-k experts remain.
 - `moe_lab/router.py` — routing, both balancing mechanisms, decorrelation penalty
 - `moe_lab/config.py` — dataclass config, YAML load/save
 - `moe_lab/data.py` — fineweb-edu streaming → BPE tokens → packed 1024-seq,
-  uint16 shard cache on disk (restarts don't re-tokenize), val divert
+  uint16 shard cache on disk (restarts don't re-tokenize), shard 0 held out for val
 - `moe_lab/prune_eval.py` — REAP-ish saliency + prunability curve
 - `train.py` — single-GPU loop (bf16 autocast, AdamW, cosine+warmup, grad clip,
   optional grad checkpoint/accum, JSONL telemetry, checkpoints to `runs/<name>/`)
